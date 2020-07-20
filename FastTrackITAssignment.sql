@@ -36,5 +36,29 @@ LEFT JOIN	Employee emp ON pers.PersonId=emp.EmployeeId
 ORDER BY	LastName, FirstName;
 
 -- Requirement 7
+SELECT		emp.EmployeeId, pers.* 
+FROM		Employee emp RIGHT OUTER JOIN Person pers 
+			ON emp.EmployeeId=pers.PersonId 
+WHERE		EmployeeId IS NULL
+ORDER BY	LastName, FirstName;
 
+-- Requirement 8
+SELECT		TOP(100) addr.AddressId, comp.CompanyId, city.CityName 
+FROM		Address addr 
+			RIGHT OUTER JOIN Company comp ON addr.AddressId = comp.MainAddressId 
+			RIGHT OUTER JOIN City city ON addr.CityId = city.CityId 
+WHERE		CompanyId IS NULL
+ORDER BY	CityName;
 
+-- Requirement 9
+INSERT INTO Address (CityId, AddressLine, PostalCode)
+	VALUES (270, '1582 Electric Highway Drive', '94303')
+
+INSERT INTO Company(CompanyName, MainAddressId) VALUES ('Tesla INC.', 8681);
+
+SELECT		comp.CompanyName,
+			CASE
+				WHEN dep.DepartmentName IS NULL THEN 'N/A' ELSE dep.DepartmentName
+			END AS DepartmentName
+FROM		Company comp LEFT JOIN Department dep ON comp.CompanyId = dep.CompanyId
+ORDER BY	CompanyName;
