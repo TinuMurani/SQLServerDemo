@@ -29,10 +29,10 @@ WHERE	DepartmentName NOT IN (SELECT DepartmentName FROM Department);
 -- Requirement 6
 SELECT		pers.FirstName, pers.LastName, pers.DateOfbirth,
 			CASE 
-				WHEN emp.EmployeeId is null THEN 0 ELSE 1 
+				WHEN emp.EmployeeId IS NULL THEN 0 ELSE 1 
 			END AS IsEmployed
 FROM		Person pers 
-LEFT JOIN	Employee emp ON pers.PersonId=emp.EmployeeId
+			LEFT JOIN Employee emp ON pers.PersonId=emp.EmployeeId
 ORDER BY	LastName, FirstName;
 
 -- Requirement 7
@@ -52,7 +52,8 @@ ORDER BY	CityName;
 
 -- Requirement 9
 INSERT INTO Address (CityId, AddressLine, PostalCode)
-	VALUES (270, '1582 Electric Highway Drive', '94303')
+	VALUES (270, '1582 Electric Highway Drive', '94303');
+GO
 
 INSERT INTO Company(CompanyName, MainAddressId) VALUES ('Tesla INC.', 8681);
 
