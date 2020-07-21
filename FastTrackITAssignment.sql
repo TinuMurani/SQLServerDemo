@@ -62,3 +62,44 @@ SELECT		comp.CompanyName,
 			END AS DepartmentName
 FROM		Company comp LEFT JOIN Department dep ON comp.CompanyId = dep.CompanyId
 ORDER BY	CompanyName;
+
+-- Requirement 10
+GO
+CREATE OR ALTER VIEW View_All_Employees
+AS
+SELECT			
+			emp.EmployeeId, 
+			pers.FirstName, pers.LastName, pers.DateOfBirth, 
+			dep.CompanyId, 
+			comp.CompanyName,  
+			empComp.CompanyDepartmentId, 
+			depName.DepartmentName, 
+			emp.BadgeCode
+FROM			
+			Employee emp INNER JOIN Person pers ON emp.EmployeeId=pers.PersonId
+			INNER JOIN EmployeeCompanyDepartment empComp ON emp.EmployeeId=empComp.EmployeeId
+			INNER JOIN CompanyDepartment dep ON empComp.CompanyDepartmentId=dep.MappingId
+			INNER JOIN DepartmentNames depName ON dep.DepartmentId=depName.DepartmentId
+			INNER JOIN Company comp ON dep.CompanyId=comp.CompanyId;
+
+GO
+
+-- Requirement 11
+CREATE OR ALTER PROCEDURE SP_Select_Employees_From_Company
+	@CompanyName NVARCHAR(200)
+AS
+	SET NOCOUNT ON;
+	SELECT		
+			comp.CompanyName,	
+			pers.FirstName, pers.LastName, 
+			depName.DepartmentName, 
+			emp.BadgeCode
+FROM			
+			Employee emp INNER JOIN Person pers ON emp.EmployeeId=pers.PersonId
+			INNER JOIN EmployeeCompanyDepartment empComp ON emp.EmployeeId=empComp.EmployeeId
+			INNER JOIN CompanyDepartment dep ON empComp.CompanyDepartmentId=dep.MappingId
+			INNER JOIN DepartmentNames depName ON dep.DepartmentId=depName.DepartmentId
+			INNER JOIN Company comp ON dep.CompanyId=comp.CompanyId
+WHERE
+			LOWER(CompanyName)=LOWER(@CompanyName);
+GO
